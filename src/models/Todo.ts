@@ -1,20 +1,24 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, models, model } from "mongoose";
 
-export interface ITodo extends Document {
-    user: mongoose.Types.ObjectId;
-    title: string;
-    description?: string;
-    completed: boolean;
-}
-
-const todoSchema = new Schema<ITodo>(
+const todoSchema = new Schema(
     {
-        user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-        title: { type: String, required: true },
-        description: String,
-        completed: { type: Boolean, default: false }
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        title: {
+            type: String,
+            required: true,
+        },
+        completed: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );
 
-export default mongoose.models.Todo || mongoose.model<ITodo>("Todo", todoSchema);
+const Todo = models.Todo || model("Todo", todoSchema);
+
+export default Todo;
