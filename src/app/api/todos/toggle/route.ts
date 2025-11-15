@@ -3,24 +3,27 @@ import { connectDB } from "@/app/lib/db";
 import Todo from "@/models/Todo";
 import { verifyToken } from "@/app/lib/todos-auth";
 import mongoose from "mongoose";
+import { logError } from "@/app/lib/logError";
 
 export async function PUT(req: Request) {
     try {
         await connectDB();
 
         const user = verifyToken(req);
-        if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        if (!user) throw new Error("Unauthorized");
 
         const { id } = await req.json();
-        if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-        }
+        if (!id) throw new Error("ID is required");
 
-        const todo = await Todo.findOne({ _id: id, userId: user.userId });
-        if (!todo) {
-            return NextResponse.json({ error: "Todo not found" }, { status: 404 });
-        }
+        if (!mongoose.Types.ObjectId.isValid(id))
+            throw new Error("Invalid ID");
+
+        const todo = await Todo.findOne({
+            _id: id,
+            userId: user.userId,
+        });
+
+        if (!todo) throw new Error("Todo not found");
 
         todo.completed = !todo.completed;
         await todo.save();
@@ -29,8 +32,12 @@ export async function PUT(req: Request) {
             message: "Todo status updated",
             todo,
         });
-    } catch (error) {
-        console.error("Toggle Todo error:", error);
-        return NextResponse.json({ error: "Server error" }, { status: 500 });
+
+    } catch (error: any) {
+        await logError(error, "PUT /api/todos/toggle");
+        return NextResponse.json(
+            { error: error?.message || "Server error" },
+            { status: 400 }
+        );
     }
 }

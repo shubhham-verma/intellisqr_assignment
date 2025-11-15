@@ -2,27 +2,33 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/db";
 import Todo from "@/models/Todo";
 import { verifyToken } from "@/app/lib/todos-auth";
+import { logError } from "@/app/lib/logError";
 
 export async function POST(req: Request) {
     try {
         await connectDB();
 
         const user = verifyToken(req);
-        if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        if (!user) throw new Error("Unauthorized");
 
         const { title } = await req.json();
-        if (!title) {
-            return NextResponse.json({ error: "Title required" }, { status: 400 });
-        }
+        if (!title) throw new Error("Title is required");
 
         const todo = await Todo.create({
             userId: user.userId,
             title,
         });
 
-        return NextResponse.json({ message: "Todo created", todo });
-    } catch (error) {
-        console.error("Create Todo error:", error);
-        return NextResponse.json({ error: "Server error" }, { status: 500 });
+        return NextResponse.json(
+            { message: "Todo created", todo },
+            { status: 201 }
+        );
+
+    } catch (error: any) {
+        await logError(error, "POST /api/todos");
+        return NextResponse.json(
+            { error: error?.message || "Server error" },
+            { status: 400 }
+        );
     }
 }

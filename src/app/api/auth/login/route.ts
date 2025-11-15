@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/app/lib/db";
 import User from "@/models/User";
+import { logError } from "@/app/lib/logError";
 
 export async function POST(req: Request) {
     try {
@@ -11,28 +12,17 @@ export async function POST(req: Request) {
         const { email, password } = await req.json();
 
         if (!email || !password) {
-            return NextResponse.json(
-                { error: "Email and password are required" },
-                { status: 400 }
-            );
+            throw new Error("Email and password are required");
         }
-
 
         const user = await User.findOne({ email });
         if (!user) {
-            return NextResponse.json(
-                { error: "Invalid email or password" },
-                { status: 401 }
-            );
+            throw new Error("Invalid email or password");
         }
-
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return NextResponse.json(
-                { error: "Invalid email or password" },
-                { status: 401 }
-            );
+            throw new Error("Invalid email or password");
         }
 
         const token = jwt.sign(
@@ -53,10 +43,11 @@ export async function POST(req: Request) {
             },
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Login error:", error);
+
+    } catch (error: any) {
+        await logError(error, "POST /api/auth/login");
         return NextResponse.json(
-            { error: "Internal server error" },
+            { error: error?.message || "Internal server error" },
             { status: 500 }
         );
     }

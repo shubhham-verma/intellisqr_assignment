@@ -4,17 +4,20 @@ import { connectDB } from "@/app/lib/db";
 import User from "@/models/User";
 import { createTransporter } from "@/app/lib/mail";
 import nodemailer from "nodemailer";
+import { logError } from "@/app/lib/logError";
 
 export async function POST(req: Request) {
     try {
         await connectDB();
+
         const { email } = await req.json();
 
         if (!email) {
-            return NextResponse.json({ error: "Email required" }, { status: 400 });
+            throw new Error("Email required");
         }
 
         const user = await User.findOne({ email });
+
         if (!user) {
             return NextResponse.json(
                 { message: "If account exists, email will be sent" },
@@ -37,17 +40,22 @@ export async function POST(req: Request) {
             to: user.email,
             subject: "Password Reset",
             html: `
-        <p>Click the link below to reset your password:</p>
-        <a href="${resetUrl}">${resetUrl}</a>
-      `,
+                <p>Click the link to reset your password:</p>
+                <a href="${resetUrl}">${resetUrl}</a>
+            `,
         });
 
         return NextResponse.json({
             message: "Reset email sent",
             preview: nodemailer.getTestMessageUrl(info),
         });
-    } catch (error) {
-        console.error("Forgot password error:", error);
-        return NextResponse.json({ error: "Server error" }, { status: 500 });
+
+    } catch (error: any) {
+        await logError(error, "POST /api/auth/forgot-password");
+
+        return NextResponse.json(
+            { error: error?.message || "Server error" },
+            { status: 500 }
+        );
     }
 }

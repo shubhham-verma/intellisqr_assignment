@@ -3,25 +3,35 @@ import { connectDB } from "@/app/lib/db";
 import Todo from "@/models/Todo";
 import { verifyToken } from "@/app/lib/todos-auth";
 import mongoose from "mongoose";
+import { logError } from "@/app/lib/logError";
 
 export async function DELETE(req: Request) {
     try {
         await connectDB();
 
         const user = verifyToken(req);
-        if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        if (!user) throw new Error("Unauthorized");
 
         const { id } = await req.json();
-        if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-        }
+        if (!id) throw new Error("ID is required");
 
-        await Todo.findOneAndDelete({ _id: id, userId: user.userId });
+        if (!mongoose.Types.ObjectId.isValid(id))
+            throw new Error("Invalid ID");
+
+        const deleted = await Todo.findOneAndDelete({
+            _id: id,
+            userId: user.userId,
+        });
+
+        if (!deleted) throw new Error("Todo not found");
 
         return NextResponse.json({ message: "Todo deleted" });
-    } catch (error) {
-        console.error("Delete Todo error:", error);
-        return NextResponse.json({ error: "Server error" }, { status: 500 });
+
+    } catch (error: any) {
+        await logError(error, "DELETE /api/todos/delete");
+        return NextResponse.json(
+            { error: error?.message || "Server error" },
+            { status: 400 }
+        );
     }
 }

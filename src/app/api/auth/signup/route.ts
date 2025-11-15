@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { connectDB } from "@/app/lib/db";
 import User from "@/models/User";
+import { logError } from "@/app/lib/logError";
 
 export async function POST(req: Request) {
     try {
@@ -9,19 +10,14 @@ export async function POST(req: Request) {
 
         const { name, email, password } = await req.json();
 
+        // Throw instead of returning early
         if (!name || !email || !password) {
-            return NextResponse.json(
-                { error: "All fields are required" },
-                { status: 400 }
-            );
+            throw new Error("All fields are required");
         }
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return NextResponse.json(
-                { error: "User already exists" },
-                { status: 400 }
-            );
+            throw new Error("User already exists");
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,11 +32,12 @@ export async function POST(req: Request) {
             { message: "Signup successful" },
             { status: 201 }
         );
-    } catch (error) {
-        console.error("Signup error:", error);
+
+    } catch (error: any) {
+        await logError(error, "POST /api/auth/signup");
 
         return NextResponse.json(
-            { error: "Internal server error" },
+            { error: error?.message || "Internal server error" },
             { status: 500 }
         );
     }
