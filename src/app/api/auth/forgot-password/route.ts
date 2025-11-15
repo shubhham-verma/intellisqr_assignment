@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             { expiresIn: "15m" }
         );
 
-        const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+        const resetUrl = `http://localhost:3000/auth/reset-password?token=${resetToken}`;
 
         const transporter = await createTransporter();
 
