@@ -115,7 +115,7 @@ export default function LoginPage() {
                 </div>
 
                 <div className="mt-6 space-y-3 text-center text-sm">
-                    <a href="/auth/reset-password" className="block text-blue-600 hover:text-blue-700 font-medium">
+                    <a href="/auth/forgot-password" className="block text-blue-600 hover:text-blue-700 font-medium">
                         Forgot password?
                     </a>
                     <p className="text-gray-600">
