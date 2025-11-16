@@ -17,10 +17,17 @@ export default function ResetPasswordPage() {
 
     if (!token) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <p className="text-red-600 text-lg font-medium">
-                    Invalid or missing reset token.
-                </p>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+                <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 max-w-md text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                    <p className="text-red-600 text-lg font-medium">
+                        Invalid or missing reset token
+                    </p>
+                </div>
             </div>
         );
     }
@@ -57,51 +64,54 @@ export default function ResetPasswordPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
-            <div className="w-full max-w-md border p-6 rounded shadow">
-                <h1 className="text-2xl font-semibold mb-6 text-center">Reset Password</h1>
+        <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+            <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Reset Password</h1>
+                    <p className="text-gray-500 text-sm">Enter your new password below</p>
+                </div>
 
                 {error && (
-                    <div className="mb-3 p-3 bg-red-100 text-red-700 rounded text-sm">
+                    <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-700 text-sm">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className="mb-3 p-3 bg-green-100 text-green-700 rounded text-sm">
+                    <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-sm">
                         {success}
                     </div>
                 )}
 
-                <div className="mb-6">
-                    <label className="block text-sm mb-1">New Password</label>
-
-                    <div className="relative">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            className="w-full border rounded p-2 pr-10 outline-none"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="••••••••"
-                        />
-
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
-                        >
-                            {showPassword ? "👁️" : "👁️‍🗨️"}
-                        </button>
+                <div className="space-y-5">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="••••••••"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                                {showPassword ? "👁️" : "👁️‍🗨️"}
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-                >
-                    {loading ? "Updating..." : "Update Password"}
-                </button>
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-lg font-medium hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    >
+                        {loading ? "Updating..." : "Update Password"}
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -41,40 +41,52 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
-            <div className="w-full max-w-md border p-6 rounded shadow">
-                <h1 className="text-2xl font-semibold mb-6 text-center">Reset Password</h1>
+        <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+            <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Reset Password</h1>
+                    <p className="text-gray-500 text-sm">Enter your email to receive a reset link</p>
+                </div>
 
                 {error && (
-                    <div className="mb-3 p-3 bg-red-100 text-red-700 rounded text-sm">
+                    <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-700 text-sm">
                         {error}
                     </div>
                 )}
 
                 {message && (
-                    <div className="mb-3 p-3 bg-green-100 text-green-700 rounded text-sm">
+                    <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-sm">
                         {message}
                     </div>
                 )}
 
-                <div className="mb-4">
-                    <label className="text-sm block mb-1">Email</label>
-                    <input
-                        type="email"
-                        className="w-full border rounded p-2 outline-none"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                    />
+                <div className="space-y-5">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                            type="email"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="you@example.com"
+                        />
+                    </div>
+
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-lg font-medium hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    >
+                        {loading ? "Sending..." : "Send Reset Link"}
+                    </button>
                 </div>
 
-                <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-                >
-                    {loading ? "Sending..." : "Send Reset Link"}
-                </button>
+                <p className="mt-6 text-center text-sm text-gray-600">
+                    Remember your password?{" "}
+                    <a href="/auth/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                        Sign in
+                    </a>
+                </p>
             </div>
         </div>
     );

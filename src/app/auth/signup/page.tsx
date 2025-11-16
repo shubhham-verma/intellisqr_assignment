@@ -49,79 +49,81 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
-            <div className="w-full max-w-md border p-6 rounded-lg shadow">
-                <h1 className="text-2xl font-semibold mb-6 text-center">Create Account</h1>
+        <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+            <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+                    <p className="text-gray-500 text-sm">Start organizing your tasks today</p>
+                </div>
 
                 {error && (
-                    <div className="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm">
+                    <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-700 text-sm">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className="mb-4 p-3 rounded bg-green-100 text-green-700 text-sm">
+                    <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-sm">
                         {success}
                     </div>
                 )}
 
-                <div className="mb-4">
-                    <label className="block text-sm mb-1">Name</label>
-                    <input
-                        type="text"
-                        className="w-full border rounded p-2 outline-none"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Your name"
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-sm mb-1">Email</label>
-                    <input
-                        type="email"
-                        className="w-full border rounded p-2 outline-none"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                    />
-                </div>
-
-                <div className="mb-6">
-                    <label className="block text-sm mb-1">Password</label>
-
-                    <div className="relative">
+                <div className="space-y-5">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
                         <input
-                            type={showPassword ? "text" : "password"}
-                            className="w-full border rounded p-2 pr-10 outline-none"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
+                            type="text"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Your name"
                         />
-
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
-                        >
-                            {showPassword ? "👁️" : "👁️‍🗨️"}
-                        </button>
                     </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                            type="email"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="you@example.com"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                                {showPassword ? "👁️" : "👁️‍🗨️"}
+                            </button>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleSignup}
+                        disabled={loading}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-lg font-medium hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    >
+                        {loading ? "Creating account..." : "Sign Up"}
+                    </button>
                 </div>
 
-
-                <button
-                    onClick={handleSignup}
-                    disabled={loading}
-                    className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-                >
-                    {loading ? "Creating account..." : "Sign Up"}
-                </button>
-
-                <p className="mt-4 text-sm text-center">
+                <p className="mt-6 text-center text-sm text-gray-600">
                     Already have an account?{" "}
-                    <a href="/auth/login" className="text-blue-600 hover:underline">
-                        Login
+                    <a href="/auth/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                        Sign in
                     </a>
                 </p>
             </div>
