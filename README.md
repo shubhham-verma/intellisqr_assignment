@@ -511,7 +511,7 @@ All queries use Zod schemas for runtime validation.
 
 ##  Demo Video
 
-**Video Link:** [Google Drive Link Here]
+**Video Link:** (https://drive.google.com/file/d/1-j-in8PE1N0U0R2-dooqA77a9hrlVjJQ/view?usp=sharing)
 
 The demo video showcases:
 -  Homepage
@@ -522,8 +522,6 @@ The demo video showcases:
 -  Marking Todo as completed/not completed
 -  Deleting a Todo
 -  Logout
-
-*(No voiceover - screen recording only)*
 
 ---
 
@@ -549,8 +547,8 @@ The demo video showcases:
 
 **Submitted by:** Shubham Verma  
 **Date:** 16/11/2025  
-**GitHub Repository:** [Your GitHub Link]  
-**Demo Video:** [Your Google Drive Link]
+**GitHub Repository:** https://github.com/shubhham-verma/intellisqr_assignment
+**Demo Video:** (https://drive.google.com/file/d/1-j-in8PE1N0U0R2-dooqA77a9hrlVjJQ/view?usp=sharing)
 
 ---
 
