@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.9",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.3",

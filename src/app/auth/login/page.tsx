@@ -33,14 +33,15 @@ export default function LoginPage() {
             });
 
             const data = await res.json();
+            // console.log(data.user.name);
 
             if (!res.ok) {
                 setError(data.error || "Login failed");
             } else {
                 setSuccess("Login successful");
 
-                // Store the JWT for authenticated Todo operations
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("userName", data.user.name);
 
                 setTimeout(() => {
                     router.push("/dashboard");
